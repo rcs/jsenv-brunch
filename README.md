@@ -15,7 +15,7 @@ config.jsenv:
 when run with
 
 ```sh
-API_HOST="https://dev.apihost.com" brunch compile
+API_HOST="https://dev.apihost.com" brunch build
 ```
 
 will compile to
