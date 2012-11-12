@@ -1,3 +1,5 @@
+vm = require 'vm'
+
 module.exports = class JsenvCompiler
   brunchPlugin: yes
   type: 'javascript'
@@ -8,10 +10,15 @@ module.exports = class JsenvCompiler
 
   compile: (data, path, callback) ->
     try
-      envHash = JSON.parse(data)
+      parsed = new Function("return #{data}")();
 
-      for key of envHash when process.env[key]
-        envHash[key] = process.env[key]
+      if typeof parsed == "function"
+        envHash = parsed(process.env)
+      else
+        envHash = JSON.parse(data)
+        for key of envHash when process.env[key]
+          envHash[key] = process.env[key]
+
       result =  "module.exports = " + JSON.stringify(envHash)
 
     catch err

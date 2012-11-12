@@ -1,6 +1,6 @@
 {
   "name": "jsenv-brunch",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Add support for processing .jsenv files to Brunch. Read environment values to compile to JS.",
   "author": "Ryan Sorensen (https://github.com/rcs)",
   "homepage": "https://github.com/rcs/jsenv-brunch",
