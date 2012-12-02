@@ -1,21 +1,31 @@
 vm = require 'vm'
+coffee = require 'coffee-script'
+sysPath = require 'path'
 
 module.exports = class JsenvCompiler
   brunchPlugin: yes
   type: 'javascript'
-  extension: 'jsenv'
+  pattern: /\.(js|coffee)env$/
 
   constructor: (@config) ->
     null
 
   compile: (data, path, callback) ->
+    sandbox =
+      module:
+        exports: undefined
+      require: require
+
     try
-      parsed = new Function("return #{data}")();
+      if sysPath.extname(path) == '.coffeeenv'
+        data = coffee.compile(data, bare: yes)
+
+      parsed = vm.runInNewContext "module.exports = #{data}", sandbox
 
       if typeof parsed == "function"
         envHash = parsed(process.env)
       else
-        envHash = JSON.parse(data)
+        envHash = parsed
         for key of envHash when process.env[key]
           envHash[key] = process.env[key]
 

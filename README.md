@@ -1,9 +1,9 @@
 ## jsenv-brunch
-Adds .jsenv support to [brunch](http://brunch.io).
+Adds .jsenv / .coffeeenv support to [brunch](http://brunch.io).
 
-.jsenv files are simple files with JSON structure that will have any matching keys replaced from environment variables.
+.jsenv / .coffeeenv files are simple files with JSON structure that will have any matching keys replaced from environment variables.
 
-.jsenv files are either JSON formatted data or files specifying a javascript function that will take an env object as an argument and return an object.
+.jsenv / .coffeeenv files are either JSON formatted data or files specifying a javascript function that will take an env object as an argument and return an object.
 
 
 ## Example
@@ -67,6 +67,15 @@ gives us
 
 Any of which can now be used in "require('config')"
 
+### CoffeeScript
+config.coffeeenv:
+```coffeescript
+(env) ->
+  if parseInt(env.EVILNESS) > 5
+    { Evil: "very evil" }
+  else
+    { Evil: "only slightly evil" }
+```
 
 ## Usage
 Add `"jsenv-brunch": "x.y.z"` to `package.json` of your brunch app.
