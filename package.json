@@ -10,9 +10,10 @@
   },
   "main": "./lib/index",
   "scripts": {
-    "prepublish": "coffee -o lib/ src/",
-    "postinstall": "node setup.js postinstall",
-    "test": "node setup.js test"
+    "prepublish": "./node_modules/.bin/coffee -o lib/ src/",
+    "preinstall": "npm install --production --ignore-scripts",
+    "postinstall": "./node_modules/.bin/coffee -o lib/ src/",
+    "test": "npm install --ignore-scripts && ./node_modules/.bin/mocha --require test/common.js --colors"
   },
   "engines": {
     "node": "~0.6.10 || 0.8 || 0.9"
