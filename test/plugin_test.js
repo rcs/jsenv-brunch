@@ -16,11 +16,11 @@ describe('Plugin', function() {
     expect(plugin).to.be.ok;
   });
 
-  it('should has #compile method', function() {
+  it('should have a #compile method', function() {
     expect(plugin.compile).to.be.an.instanceof(Function);
   });
 
-  it('should compile and produce valid result for JSON strings when .jsenv file given', function(done) {
+  it('should compile and produce valid result for JSON strings when .jsenv file given', function() {
     var content = '{"SHIRT_COLOR":"blue","SHIRT_SIZE":"large"}';
 
     process.env.SHIRT_COLOR = "red";
@@ -30,15 +30,13 @@ describe('Plugin', function() {
       "SHIRT_SIZE": "large"
     };
 
-    plugin.compile(content, 'env.jsenv', function(error, data) {
-      var thing = vm.runInNewContext(data,sandbox);
-      expect(error).not.to.be.ok;
-      expect(sandbox.module.exports).to.eql(expected);
-      done();
-    });
+    return plugin.compile({ data: content, path: 'env.jsenv' }).then(function(result) {
+      var thing = vm.runInNewContext(result,sandbox);
+      return expect(sandbox.module.exports).to.eql(expected);
+    },function(err) { expect(err).not.to.be.ok });
   });
 
-  it('should compile and produce valid result for JSON strings when .coffeeenv file given', function(done) {
+  it('should compile and produce valid result for JSON strings when .coffeeenv file given', function() {
     var content = [
       '"SHIRT_COLOR": "blue"',
       '"SHIRT_SIZE": "large"'
@@ -51,12 +49,10 @@ describe('Plugin', function() {
       "SHIRT_SIZE": "large"
     };
 
-    plugin.compile(content, 'env.coffeeenv', function(error, data) {
-      vm.runInNewContext(data,sandbox);
-      expect(error).not.to.be.ok;
-      expect(sandbox.module.exports).to.eql(expected);
-      done();
-    });
+    plugin.compile({ data: content, path: 'env.coffeeenv' }).then(function(result) {
+      vm.runInNewContext(result,sandbox);
+      return expect(sandbox.module.exports).to.eql(expected);
+    },function(err) { expect(err).not.to.be.ok });
   });
 
   describe("javascript files",function() {
@@ -74,34 +70,30 @@ describe('Plugin', function() {
         + '}';
     });
 
-    it('should compile and produce valid result for javascript files down one branch', function(done) {
+    it('should compile and produce valid result for javascript files down one branch', function() {
       process.env.EVILNESS = "9001";
 
       var expected = {
         "Evil": "very evil"
       };
 
-      plugin.compile(content, 'env.jsenv', function(error, data) {
-        vm.runInNewContext(data,sandbox);
-        expect(error).not.to.be.ok;
-        expect(sandbox.module.exports).to.eql(expected);
-        done();
-      });
+      return plugin.compile({ data: content, path: 'env.jsenv' }).then(function(result) {
+        vm.runInNewContext(result,sandbox);
+        return expect(sandbox.module.exports).to.eql(expected);
+      },function(err) { expect(err).not.to.be.ok });
     });
 
-    it('should compile and produce valid result for javascript files down the other branch', function(done) {
+    it('should compile and produce valid result for javascript files down the other branch', function() {
       process.env.EVILNESS = "5";
 
       var expected = {
         "Evil": "only slightly evil"
       };
 
-      plugin.compile(content, 'env.jsenv', function(error, data) {
-        vm.runInNewContext(data,sandbox);
-        expect(error).not.to.be.ok;
-        expect(sandbox.module.exports).to.eql(expected);
-        done();
-      });
+      return plugin.compile({ data: content, path: 'env.jsenv' }).then(function(result) {
+        vm.runInNewContext(result,sandbox);
+        return expect(sandbox.module.exports).to.eql(expected);
+      },function(err) { expect(err).not.to.be.ok });
     });
   });
 
@@ -118,49 +110,43 @@ describe('Plugin', function() {
       ].join('\n');
     });
 
-    it('should compile and produce valid result for coffeescript files down one branch', function(done) {
+    it('should compile and produce valid result for coffeescript files down one branch', function() {
       process.env.EVILNESS = "9001";
 
       var expected = {
         "Evil": "very evil"
       };
 
-      plugin.compile(content, 'env.coffeeenv', function(error, data) {
-        vm.runInNewContext(data,sandbox);
-        expect(error).not.to.be.ok;
-        expect(sandbox.module.exports).to.eql(expected);
-        done();
-      });
+      return plugin.compile({ data: content, path: 'env.coffeeenv' }).then(function(result) {
+        vm.runInNewContext(result,sandbox);
+        return expect(sandbox.module.exports).to.eql(expected);
+      },function(err) { expect(err).not.to.be.ok });
     });
 
-    it('should compile and produce valid result for coffeescript files down the other branch', function(done) {
+    it('should compile and produce valid result for coffeescript files down the other branch', function() {
       process.env.EVILNESS = "5";
 
       var expected = {
         "Evil": "only slightly evil"
       };
 
-      plugin.compile(content, 'env.coffeeenv', function(error, data) {
-        vm.runInNewContext(data,sandbox);
-        expect(error).not.to.be.ok;
+      return plugin.compile({ data: content, path: 'env.coffeeenv' }).then(function(result) {
+        vm.runInNewContext(result,sandbox);
         expect(sandbox.module.exports).to.eql(expected);
-        done();
-      });
+      },function(err) { expect(err).not.to.be.ok });
     });
   });
 
-  it("should enable the require function in the jsenv context", function(done) {
+  it("should enable the require function in the jsenv context", function() {
     var content = '{requireType: typeof require}';
 
     var expected = {
       "requireType": "function"
     };
 
-    plugin.compile(content, 'env.jsenv', function(error, data) {
-      vm.runInNewContext(data,sandbox);
-      expect(error).not.to.be.ok;
+    return plugin.compile({ data: content, path: 'env.jsenv' }).then(function(result) {
+      vm.runInNewContext(result,sandbox);
       expect(sandbox.module.exports).to.eql(expected);
-      done();
-    });
+    },function(err) { expect(err).not.to.be.ok });
   });
 });
