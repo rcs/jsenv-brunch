@@ -5,6 +5,8 @@ Adds .jsenv / .coffeeenv support to [brunch](http://brunch.io).
 
 .jsenv / .coffeeenv files are either JSON formatted data or files specifying a javascript function that will take an env object as an argument and return an object.
 
+Version >= 2.0.0 supports node >= 4 and brunch >=2.  For those using
+versions lower than these please use jsenv-brunch 1.4.2.
 
 ## Example
 
