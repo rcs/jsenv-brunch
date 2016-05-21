@@ -6,7 +6,7 @@
   "homepage": "https://github.com/rcs/jsenv-brunch",
   "repository": {
     "type": "git",
-    "url": "git@github.com:rcs/jsenv-brunch.git"
+    "url": "https://github.com/rcs/jsenv-brunch.git"
   },
   "main": "./index",
   "license": "MIT",
@@ -26,5 +26,11 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "mocha": "^2.4.5"
-  }
+  },
+  "contributors": [
+    {
+      "name": "Kenley Tomlin",
+      "url": "https://github.com/kenleytomlin"
+    }
+  ]
 }
